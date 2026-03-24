@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Licitações</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background-color: #f5f6fa;">
+
+<div class="container mt-5">
+
+    <h1 class="text-center mb-4">Busca Inteligente de Licitações</h1>
+
+    <!-- FORM -->
+    <div class="card p-4 mb-4 shadow-sm">
+        <form method="GET">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label>Busca</label>
+                    <input type="text" name="consulta" class="form-control" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label>Estado</label>
+                    <input type="text" name="uf" class="form-control" placeholder="PR">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Município</label>
+                    <input type="text" name="municipio" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Valor mínimo</label>
+                    <input type="number" name="valor_min" class="form-control">
+                </div>
+
+            </div>
+
+            <div class="text-end mt-3">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- RESULTADOS -->
+    {% if resultados %}
+    <div class="card p-4 shadow-sm">
+
+        <h5>Resultados</h5>
+
+        <table class="table table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Similaridade</th>
+                    <th>Descrição</th>
+                    <th>Órgão</th>
+                    <th>Local</th>
+                    <th>Valor</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in resultados %}
+                <tr>
+                    <td>{{ r.similaridade }}</td>
+                    <td>{{ r.descricao }}</td>
+                    <td>{{ r.orgao }}</td>
+                    <td>{{ r.municipio }} - {{ r.uf }}</td>
+                    <td>
+                        {% if r.valor %}
+                            R$ {{ r.valor }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ r.link }}" target="_blank" class="btn btn-sm btn-success">
+                            Ver Edital
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    {% endif %}
+
+    <!-- STATS -->
+    {% if stats %}
+    <div class="card p-4 mt-4 shadow-sm text-center">
+        <h5>Análise de Preços</h5>
+        <p>Média: R$ {{ stats.media }}</p>
+        <p>Menor: R$ {{ stats.menor }}</p>
+        <p>Maior: R$ {{ stats.maior }}</p>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
